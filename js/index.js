@@ -5,7 +5,7 @@ app = angular.module('inSwitchApp', ['ngMaterial']);
 app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildToggler('right');
-    $scope.isOpenRight = function(){
+    $scope.isOpenRight = function () {
         return $mdSidenav('right').isOpen();
     };
     /**
@@ -18,18 +18,19 @@ app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
             var context = $scope,
                 args = Array.prototype.slice.call(arguments);
             $timeout.cancel(timer);
-            timer = $timeout(function() {
+            timer = $timeout(function () {
                 timer = undefined;
                 func.apply(context, args);
             }, wait || 10);
         };
     }
+
     /**
      * Build handler to open/close a SideNav; when animation finishes
      * report completion in console
      */
     function buildDelayedToggler(navID) {
-        return debounce(function() {
+        return debounce(function () {
             $mdSidenav(navID)
                 .toggle()
                 .then(function () {
@@ -37,8 +38,9 @@ app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
                 });
         }, 200);
     }
+
     function buildToggler(navID) {
-        return function() {
+        return function () {
             $mdSidenav(navID)
                 .toggle()
                 .then(function () {
@@ -47,11 +49,37 @@ app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
         }
     }
 })
-    .controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
-        $scope.close = function () {
-            $mdSidenav('left').close()
-                .then(function () {
-                    $log.debug("close LEFT is done");
-                });
-        };
-    });
+app.controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
+    $scope.close = function () {
+        $mdSidenav('left').close()
+            .then(function () {
+                $log.debug("close LEFT is done");
+            });
+    };
+});
+
+app.controller('ListCtrl', function ($scope,$log,$rootScope) {
+    $scope.switches = getListOfSwitches();
+
+    $scope.toggleSwitch = function(changedSwitch){
+        stateOfSwitch = changedSwitch.enabled;
+        if(stateOfSwitch){
+            $log.log('Switch Is On')
+        }
+        else{
+            $log.log('Switch Is Off')
+        }
+    };
+
+    $scope.navigateTo = function(id){
+        $rootScope.currentSwitchID=id;
+        $log.log($rootScope.currentSwitchID)
+    };
+
+    function getListOfSwitches(){
+        listOfSwitch = [{name: 'Switch 1', id: '0001', enabled: true},
+            {name: 'Switch 2', id: '4111', enabled: false}];
+        return listOfSwitch;
+    }
+
+});

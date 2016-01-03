@@ -12,13 +12,14 @@
                 <h1 class="md-toolbar-tools">Switches</h1>
             </md-toolbar>
             <md-content layout-padding ng-controller="LeftCtrl">
-                <md-button ng-click="close()" class="md-primary" hide-gt-md>
-                    Close Sidenav Left
-                </md-button>
-                <p hide-md show-gt-md>
-                    This sidenav is locked open on your device. To go back to the default behavior,
-                    narrow your display.
-                </p>
+                <md-list ng-controller="ListCtrl" ng-cloak>
+                    <md-list-item ng-click="navigateTo(switchButton.id)" ng-repeat="switchButton in switches">
+                        <p> {{ switchButton.name }} </p>
+                        <md-switch class="md-secondary" ng-model="switchButton.enabled" ng-change="toggleSwitch(switchButton)"></md-switch>
+                        <md-divider></md-divider>
+                    </md-list-item>
+
+                    </md-list>
             </md-content>
         </md-sidenav>
         <md-content flex layout-padding md-swipe-right="toggleLeft()">
