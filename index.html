@@ -9,7 +9,7 @@
     <section layout="row" flex>
         <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
             <md-toolbar class="md-theme-indigo">
-                <h1 class="md-toolbar-tools">Switches</h1>
+                <h1 class="md-toolbar-tools">List Of Switches</h1>
             </md-toolbar>
             <md-content layout-padding ng-controller="LeftCtrl">
                 <md-list ng-controller="ListCtrl" ng-cloak>
@@ -22,11 +22,13 @@
                     </md-list>
             </md-content>
         </md-sidenav>
-        <md-content flex layout-padding md-swipe-right="toggleLeft()">
-            <div layout="column" layout-fill layout-align="top center">
-                <p>
-                    The left sidenav will 'lock open' on a medium (>=960px wide) device.
-                </p>
+        <md-content flex layout-padding md-swipe-right="toggleLeft()" >
+            <div layout="column" layout-fill layout-align="top center" ng-show="showSwitchInfo">
+                <h1>{{currentSwitch.name}}</h1>
+                <p>{{currentSwitch.id}} and Enabled:{{currentSwitch.state}}</p>
+            </div>
+            <div layout="column" layout-fill layout-align="top center" ng-hide="showSwitchInfo">
+                <h1>Slide Right and Pick a Switch</h1>
             </div>
             <div flex></div>
         </md-content>

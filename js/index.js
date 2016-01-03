@@ -2,7 +2,7 @@
  * Created by Sivaneshwaran Loganathan on 1/2/2016.
  */
 app = angular.module('inSwitchApp', ['ngMaterial']);
-app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
+app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log, $rootScope) {
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildToggler('right');
     $scope.isOpenRight = function () {
@@ -48,7 +48,24 @@ app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
                 });
         }
     }
-})
+
+    $scope.showSwitchInfo=false;
+    //$rootScope.currentSwitchID=null;
+    $rootScope.$watch('currentSwitchID',function(newValue,oldValue){
+        if(newValue!=undefined){
+            $scope.showSwitchInfo=true;
+        }
+        $scope.currentSwitch = getSwitch(newValue);
+    });
+
+    function getSwitch(id){
+        //do a http get method here to get the current switch from the SQL table
+        return {name:'Switch 1',id:id, state: true};
+    }
+
+
+});
+
 app.controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
     $scope.close = function () {
         $mdSidenav('left').close()
@@ -62,6 +79,7 @@ app.controller('ListCtrl', function ($scope,$log,$rootScope) {
     $scope.switches = getListOfSwitches();
 
     $scope.toggleSwitch = function(changedSwitch){
+        //do a http post method to chance the state of a switch from the server
         stateOfSwitch = changedSwitch.enabled;
         if(stateOfSwitch){
             $log.log('Switch Is On')
@@ -73,10 +91,10 @@ app.controller('ListCtrl', function ($scope,$log,$rootScope) {
 
     $scope.navigateTo = function(id){
         $rootScope.currentSwitchID=id;
-        $log.log($rootScope.currentSwitchID)
     };
 
     function getListOfSwitches(){
+        //do a http get method here to get the list of switches from the server
         listOfSwitch = [{name: 'Switch 1', id: '0001', enabled: true},
             {name: 'Switch 2', id: '4111', enabled: false}];
         return listOfSwitch;
