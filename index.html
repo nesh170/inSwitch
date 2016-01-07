@@ -5,9 +5,10 @@
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
 </head>
 <body ng-app="inSwitchApp">
-<div ng-controller="AppCtrl" layout="column" style="height:500px;" ng-cloak>
+<div ng-controller="AppCtrl" layout="column" style="height:100%;" ng-cloak>
     <section layout="row" flex>
-        <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+        <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
+                    md-is-locked-open="$mdMedia('gt-md')">
             <md-toolbar class="md-theme-indigo">
                 <h1 class="md-toolbar-tools">List Of Switches</h1>
             </md-toolbar>
@@ -15,25 +16,64 @@
                 <md-list ng-controller="ListCtrl" ng-cloak>
                     <md-list-item ng-click="navigateTo(switchButton.id)" ng-repeat="switchButton in switches">
                         <p> {{ switchButton.name }} </p>
-                        <md-switch class="md-secondary" ng-model="switchButton.enabled" ng-change="toggleSwitch(switchButton)"></md-switch>
                         <md-divider></md-divider>
                     </md-list-item>
 
-                    </md-list>
+                </md-list>
             </md-content>
         </md-sidenav>
-        <md-content flex layout-padding md-swipe-right="toggleLeft()" >
+        <md-content flex layout-padding md-swipe-right="toggleLeft()">
             <div layout="column" layout-fill layout-align="top center" ng-show="showSwitchInfo">
                 <h1>{{currentSwitch.name}}</h1>
-                <p>{{currentSwitch.id}} and Enabled:{{currentSwitch.state}}</p>
+                <div layout="column" ng-cloak class="md-inline-form" style="width: 100%">
+                    <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+                        <div layout-gt-xs="row">
+                            <md-input-container flex-gt-xs>
+                                <label>Switch Name</label>
+                                <input ng-model="currentSwitch.name">
+                            </md-input-container>
+                            <md-input-container flex-gt-xs>
+                                <label>Switch State</label>
+                                <md-select ng-model="currentSwitch.state">
+                                    <md-option ng-repeat="state in states" value="{{state.abbrev}}">
+                                        {{state.abbrev}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </md-content>
+                    <md-content layout-padding>
+                        <div>
+                            <div layout-gt-xs="row">
+                                <md-input-container class="md-block" flex-gt-xs>
+                                    <label>Location Of Switch</label>
+                                    <input ng-model="currentSwitch.location">
+                                </md-input-container>
+                            </div>
+                            <md-input-container class="md-block">
+                                <label>Notes</label>
+                                <textarea ng-model="currentSwitch.notes" columns="1" md-maxlength="150" rows="5"></textarea>
+                            </md-input-container>
+                            <md-input-container flex-gt-xs>
+                                <label>Timestamp of Last Update</label>
+                                <input ng-model="currentSwitch.timestamp" disabled>
+                            </md-input-container>
+                        </div>
+                        <md-button style="width: 99%" align="center" class="md-raised md-primary">
+                            Submit
+                        </md-button>
+                    </md-content>
+                </div>
             </div>
+
+
             <div layout="column" layout-fill layout-align="top center" ng-hide="showSwitchInfo">
                 <h1>Slide Right and Pick a Switch</h1>
             </div>
             <div flex></div>
         </md-content>
-        </section>
-    </div>
+    </section>
+</div>
 
 <!-- Angular Material requires Angular.js Libraries -->
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>

@@ -49,21 +49,39 @@ app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log, $rootSco
         }
     }
 
-    $scope.showSwitchInfo=false;
+    $scope.showSwitchInfo = false;
     //$rootScope.currentSwitchID=null;
-    $rootScope.$watch('currentSwitchID',function(newValue,oldValue){
-        if(newValue!=undefined){
-            $scope.showSwitchInfo=true;
+    $rootScope.$watch('currentSwitchID', function (newValue, oldValue) {
+        if (newValue != undefined) {
+            $scope.showSwitchInfo = true;
         }
         $scope.currentSwitch = getSwitch(newValue);
     });
 
-    function getSwitch(id){
+    function getSwitch(id) {
         //do a http get method here to get the current switch from the SQL table
-        return {name:'Switch 1',id:id, state: true};
+        switchInfo = {
+            name: 'Developer',
+            id: id,
+            state: 'ON',
+            location: '3rd Switch in the Hall',
+            notes: 'Loves kittens, snowboarding, and can type at 130 WPM.\n\nAnd rumor has it she bouldered up Castle Craig!',
+            timestamp: id
+        };
+        return switchInfo;
     }
 
 
+    $scope.states = ('ON OFF').split(' ').map(function (state) {
+        return {abbrev: state};
+    })
+
+
+}).config(function ($mdThemingProvider) {
+    // Configure a dark theme with primary foreground yellow
+    $mdThemingProvider.theme('docs-dark', 'default')
+        .primaryPalette('yellow')
+        .dark();
 });
 
 app.controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
@@ -75,25 +93,17 @@ app.controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
     };
 });
 
-app.controller('ListCtrl', function ($scope,$log,$rootScope) {
+
+
+
+app.controller('ListCtrl', function ($scope, $log, $rootScope) {
     $scope.switches = getListOfSwitches();
 
-    $scope.toggleSwitch = function(changedSwitch){
-        //do a http post method to chance the state of a switch from the server
-        stateOfSwitch = changedSwitch.enabled;
-        if(stateOfSwitch){
-            $log.log('Switch Is On')
-        }
-        else{
-            $log.log('Switch Is Off')
-        }
+    $scope.navigateTo = function (id) {
+        $rootScope.currentSwitchID = id;
     };
 
-    $scope.navigateTo = function(id){
-        $rootScope.currentSwitchID=id;
-    };
-
-    function getListOfSwitches(){
+    function getListOfSwitches() {
         //do a http get method here to get the list of switches from the server
         listOfSwitch = [{name: 'Switch 1', id: '0001', enabled: true},
             {name: 'Switch 2', id: '4111', enabled: false}];
