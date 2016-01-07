@@ -2,6 +2,9 @@
  * Created by Sivaneshwaran Loganathan on 1/2/2016.
  */
 app = angular.module('inSwitchApp', ['ngMaterial']);
+app.config(function ($interpolateProvider) {
+    $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+});
 app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log, $rootScope) {
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildToggler('right');
@@ -60,21 +63,20 @@ app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log, $rootSco
 
     function getSwitch(id) {
         //do a http get method here to get the current switch from the SQL table
-        switchInfo = {
-            name: 'Developer',
-            id: id,
-            state: 'ON',
-            location: '3rd Switch in the Hall',
-            notes: 'Loves kittens, snowboarding, and can type at 130 WPM.\n\nAnd rumor has it she bouldered up Castle Craig!',
-            timestamp: id
-        };
+        listOfSwitches = $rootScope.switches;
+        switchInfo = {};
+        $log.log(listOfSwitches);
+        if (listOfSwitches != undefined) {
+            for (index = 0; index < listOfSwitches.length; index++) {
+                if (listOfSwitches[index].id == id) {
+                    switchInfo = listOfSwitches[index];
+                }
+            }
+        }
+        $scope.stateSwtichBoolean = switchInfo.state=="ON";
         return switchInfo;
     }
 
-
-    $scope.states = ('ON OFF').split(' ').map(function (state) {
-        return {abbrev: state};
-    })
 
 
 }).config(function ($mdThemingProvider) {
@@ -94,20 +96,20 @@ app.controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
 });
 
 
-
-
-app.controller('ListCtrl', function ($scope, $log, $rootScope) {
-    $scope.switches = getListOfSwitches();
+app.controller('ListCtrl', function ($scope, $log, $rootScope, $http) {
 
     $scope.navigateTo = function (id) {
         $rootScope.currentSwitchID = id;
     };
 
-    function getListOfSwitches() {
-        //do a http get method here to get the list of switches from the server
-        listOfSwitch = [{name: 'Switch 1', id: '0001', enabled: true},
-            {name: 'Switch 2', id: '4111', enabled: false}];
-        return listOfSwitch;
-    }
+    $http({
+        method: 'GET',
+        url: '/switchList'
+    }).then(function successCallback(response) {
+        $rootScope.switches = response.data;
+        $log.log(response.data);
+    }, function errorCallback(response) {
+        $log.error(response)
+    });
 
 });
