@@ -39,12 +39,8 @@ db.create_all()
 @app.route("/<name>/<id>")
 def switchAdd(name, id):
     switchNew = switchClass(name, id,'my house','lol')
-    db.session().add(switchNew)
-    try:
-        db.session.commit()
-    except SQLAlchemyError as e:
-        reason=str(e)
-        flash(reason)
+    db.session.add(switchNew)
+    db.session.commit()
     return "added To switchList"
 
 # this should be a post method to update the state of the switch add {{url_for('updateState')}}
