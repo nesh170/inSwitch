@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 class switchClass(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80));
-    identifier = db.Column(db.Integer, unique=True);
+    identifier = db.Column(db.Integer);
     state = db.Column(db.String(3));
     location = db.Column(db.String(80));
     notes = db.Column(db.String(150));
@@ -40,7 +40,11 @@ db.create_all()
 def switchAdd(name, id):
     switchNew = switchClass(name, id,'my house','lol')
     db.session().add(switchNew)
-    db.session().commit()
+    try:
+        db.session.commit()
+    except SQLAlchemyError as e:
+        reason=str(e)
+        flash(reason)
     return "added To switchList"
 
 # this should be a post method to update the state of the switch add {{url_for('updateState')}}
