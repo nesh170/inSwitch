@@ -8,13 +8,14 @@ from flask.templating import render_template
 from time import strftime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(
+    tempfile.gettempdir(), 'test.db')
 db = SQLAlchemy(app)
 
 class switchClass(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80));
-    identifier = db.Column(db.Integer);
+    identifier = db.Column(db.Integer, unique=True);
     state = db.Column(db.String(3));
     location = db.Column(db.String(80));
     notes = db.Column(db.String(150));
@@ -33,6 +34,7 @@ class switchClass(db.Model):
         jsonString = json.dumps(jsonDicionary)
         return jsonString
 
+#db.drop_all()
 db.create_all()
 
 # switch this to a post method, need to figure out override
@@ -84,4 +86,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',debug=True)
+    app.run(debug=True)
