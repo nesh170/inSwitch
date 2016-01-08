@@ -8,8 +8,7 @@ from flask.templating import render_template
 from time import strftime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(
-    tempfile.gettempdir(), 'test.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(tempfile.gettempdir(), 'test.db')
 db = SQLAlchemy(app)
 
 class switchClass(db.Model):
