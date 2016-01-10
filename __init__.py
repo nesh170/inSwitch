@@ -6,9 +6,10 @@ from flask import request
 import json
 from flask.templating import render_template
 from time import strftime
+import keys
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(tempfile.gettempdir(), 'test.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = keys.MYSQL_KEY;
 db = SQLAlchemy(app)
 
 class switchClass(db.Model):
@@ -85,4 +86,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
