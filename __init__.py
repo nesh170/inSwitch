@@ -63,6 +63,8 @@ def updateSwitchState():
 def checkState(state):
     if "ON" not in state:
         return "OFF"
+    elif "RES" in state:
+        return "RES"
     else:
         return "ON"
 

@@ -74,6 +74,9 @@ app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log, $rootSco
             }
         }
         $scope.stateSwtichBoolean = switchInfo.state=="ON";
+        if(switchInfo.state=="RES"){
+            $scope.stateSwtichBoolean = switchInfo.state=="RES";
+        }
         return switchInfo;
     }
 
