@@ -9,14 +9,15 @@
 * Declaring the variables and constants
 */
 const int ON_STATE = 0;
+const int RESET_STATE = 3;
 unsigned int nextTime = 0;    // Next time to contact the server
 char onArray[] = "ON";
 HttpClient http;
 unsigned int servoDelay = 100;
 Servo servo;
 unsigned int currentState = 0;
-unsigned int cWise = 1600;
-unsigned int anticWise = 1400;
+unsigned int cWise = 1550;
+unsigned int anticWise = 1425;
 
 http_header_t headers[] = {
     { "Accept" , "*/*"},
@@ -32,6 +33,7 @@ void setup() {
     pinMode(D5, OUTPUT); //LED indicator switch
     digitalWrite(D5, HIGH); //Initial assumption that switch is on
     pinMode(D3,INPUT); //Limit Switch
+    pinMode(D7,OUTPUT);
     servo.attach(D0);
     
     request.hostname = "colab-sbx-56.oit.duke.edu";
@@ -64,6 +66,14 @@ void executeState(int state){
         runServo(ON_STATE);
         Serial.println("ON");
     }
+    else if(state==RESET_STATE){
+        servoDelay = 50;
+        digitalWrite(D7,HIGH);
+        runServo(ON_STATE);
+        delay(2000);
+        digitalWrite(D7,LOW);
+        
+    }
     else{
         digitalWrite(D5, LOW); 
         runServo(state);
@@ -79,8 +89,8 @@ void runServo(int servoState){
         servoDelay = 0;
     }
     else{ //detect for limit Switch hitting to stop, flip from on to off
-        servoDelay = servoDelay + 5;
         servo.writeMicroseconds(anticWise);
+        servoDelay = servoDelay + 5;
         delay(5);
         while(digitalRead(D3)==LOW){
             servoDelay = servoDelay + 5;
@@ -89,3 +99,4 @@ void runServo(int servoState){
         servo.writeMicroseconds(1500);
     }
 }
+
