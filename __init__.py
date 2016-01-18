@@ -61,10 +61,10 @@ def updateSwitchState():
     return redirect(url_for("index"))
 
 def checkState(state):
-    if "ON" not in state:
-        return "OFF"
-    elif "RES" in state:
+    if "RES" in state:
         return "RES"
+    elif "ON" not in state:
+        return "OFF"
     else:
         return "ON"
 
