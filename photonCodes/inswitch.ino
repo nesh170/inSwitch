@@ -76,7 +76,7 @@ void executeState(int state){
         Serial.println("ON");
     }
     else if(state==RESET_STATE){
-        servoDelay = 50;
+        servoDelay = 400;
         digitalWrite(D7,HIGH);
         runServo(ON_STATE);
         delay(2000);
@@ -109,6 +109,7 @@ void runServo(int servoState){
             servoDelay = servoDelay + 5;
             delay(5);
         }
+        servoDelay = servoDelay * 1.1;
         servo.writeMicroseconds(1500);
     }
 }
