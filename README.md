@@ -25,3 +25,5 @@ API
 	* Obtain the list of switches as a json object
 * /switchStateID/&lt;id>
 	* Obtain the switch state as either "ON" or "OFF" of the switch which has the id &lt;id>
+* /updateStateUsingSensor
+	* HTTP POST method to update a switch with a JSON object of form {id:'id',state:'state'}
