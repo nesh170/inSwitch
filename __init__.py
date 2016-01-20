@@ -75,6 +75,7 @@ def updateStateFromSensor():
         id = data['id'];
         switchUpdate = switchClass.query.filter_by(identifier=id).first();
         switchUpdate.state = data['state'];
+        db.session.commit()
     return redirect(url_for("index"));
 
 # this is the get api, format it to JSON?
