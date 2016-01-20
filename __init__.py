@@ -68,6 +68,14 @@ def checkState(state):
     else:
         return "ON"
 
+@app.route("/updateStateUsingSensor",methods=['POST'])
+def updateStateFromSensor():
+    if request.method == 'POST':
+        data = request.get_json(force=True);
+        id = data['id'];
+        switchUpdate = switchClass.query.filter_by(identifier=id).first();
+        switchUpdate.state = data['state'];
+
 # this is the get api, format it to JSON?
 @app.route("/switchList", methods=['GET'])
 def displayList():
